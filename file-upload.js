@@ -19,6 +19,8 @@ const upload = multer({
   },
 })
 
+const uploadSingle = upload.single('document')
+
 const uploadMultiple = upload.fields([
   { name: 'front_id', maxCount: 1 },
   { name: 'back_id', maxCount: 1 },
@@ -26,4 +28,4 @@ const uploadMultiple = upload.fields([
   { name: 'resumes', maxCount: 8 },
 ])
 
-module.exports = { uploadMultiple }
+module.exports = { uploadMultiple, uploadSingle }

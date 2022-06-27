@@ -1,6 +1,7 @@
 const express = require('express')
-const { uploadMultiple } = require('./file-upload')
+const { uploadMultiple, uploadSingle } = require('./file-upload')
 const app = express()
+const Tesseract = require('tesseract.js')
 
 const logger = require('morgan')
 const PORT = process.env.PORT || 5008
@@ -31,6 +32,19 @@ app.post('/api/upload', uploadMultiple, async (req, res) => {
     return res.status(200).json('Done uploading')
   } catch (error) {
     console.log('shebang')
+    console.log(error.message)
+    res.status(500).json({ error: error.message })
+  }
+})
+
+app.post('/api/doc', uploadSingle, (req, res) => {
+  try {
+    const { path } = req.file
+    Tesseract.recognize(__dirname + '/' + path, 'eng', {
+      logger: m => console.log(m),
+    }).then(({ data: { text } }) => console.log(text))
+    return res.status(200).json('Done uploading')
+  } catch (error) {
     console.log(error.message)
     res.status(500).json({ error: error.message })
   }
